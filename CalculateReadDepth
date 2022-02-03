@@ -1,0 +1,6 @@
+#$ -m abe 
+#$ -M walshdj@nih.gov
+#$ -l mem_free=10G,h_vmem=10G
+A=$(grep $SRRbase ./table.txt) 
+~/bin/samtools/samtools depth -r MT -d 0 ./alignment/"$SRRbase"_rgmd.bam | \
+sed "s/^/$A        /g" >> ./depth/"$SRRbase"_mitorearrangedepth.txt
