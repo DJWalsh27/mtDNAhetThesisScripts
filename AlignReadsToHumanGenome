@@ -1,0 +1,16 @@
+#!/bin/bash
+######################
+#$ -m abe 
+#$ -M walshdj@nih.gov
+#$ -l mem_free=4G,h_vmem=4G -pe make-dedicated 24
+#BWA align paired-end Framingham reads to human genome, then convert to BAM and sort
+SRRbase=$(awk "NR==$SGE_TASK_ID {print}" ../SRR_Acc_List.txt)
+/cluster/ifs/projects/brody/djw/bin/bwa/bwa mem -t 24 /cluster/ifs/projects/brody/djw/reference_genomes/human/BWAindex/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa \
+/cluster/ifs/projects/brody/djw/ncbiworkstation/sra/"$SRRbase"_1.fastq.gz \
+/cluster/ifs/projects/brody/djw/ncbiworkstation/sra/"$SRRbase"_2.fastq.gz \
+-o /cluster/ifs/projects/brody/djw/Fram2/alignment/"$SRRbase"_bwaWG.sam
+~/bin/samtools/samtools view -u --threads 24 \
+/cluster/ifs/projects/brody/djw/Fram2/alignment/"$SRRbase"_bwaWG.sam | \
+~/bin/samtools/samtools sort --threads 24 -o /cluster/ifs/projects/brody/djw/Fram2/alignment/"$SRRbase"_bwaWGsorted.bam
+/bin/rm /cluster/ifs/projects/brody/djw/Fram2/alignment/"$SRRbase"_bwaWG.sam
+~/bin/samtools/samtools index -@ 24 /cluster/ifs/projects/brody/djw/Fram2/alignment/"$SRRbase"_bwaWGsorted.bam
