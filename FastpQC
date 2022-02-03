@@ -1,0 +1,8 @@
+######################
+#$ -m abe 
+#$ -M walshdj@nih.gov
+#$ -l mem_free=5G,h_vmem=5G -pe make-dedicated 16
+# Program to carry out fastp on paired-end reads
+/cluster/ifs/projects/brody/djw/bin/fastp -i ../fastq/links/"$SRRbase"_L004_R1_001.fastq.gz -I ../fastq/links/"$SRRbase"_L004_R2_001.fastq.gz \
+-o ../fastq/"$SRRbase"_qc.R1.fastq.gz -O ../fastq/"$SRRbase"_qc.R2.fastq.gz \
+-h ../fastq/"$SRRbase".html -w 16 -e 30  
