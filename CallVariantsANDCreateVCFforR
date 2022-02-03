@@ -1,0 +1,10 @@
+#!/bin/bash
+######################
+#$ -m abe 
+#$ -M walshdj@nih.gov
+#$ -l mem_free=1G,h_vmem=1G 
+#$ -cwd
+# bcftools mpileup
+~/bin/bcftools/bin/bcftools mpileup --no-BAQ -d 1000000 -f ../../reference_genomes/mouse/mito/mtDNA.GRCm28.dna_sm.primary_assembly.fa \
+--ff UNMAP,SECONDARY,QCFAIL,DUP -Q 30 --skip-indels ../alignment/"$SRRbase"_rgmd.bam | ~/bin/bcftools/bin/bcftools call -m -P 0.9999 \
+| ~/bin/bcftools/bin/bcftools norm -m - | ~/bin/bcftools/bin/bcftools query -f '%CHROM\t%POS\t%REF\t%ALT\t%DP\t%DP4\n' | /bin/sed "s/^/$SRRbase\t/" > ../VCF/"$SRRbase".align.Q30.count
