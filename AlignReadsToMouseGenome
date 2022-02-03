@@ -1,0 +1,8 @@
+#!/bin/bash
+######################
+#$ -m abe 
+#$ -M walshdj@nih.gov
+#$ -l mem_free=4G,h_vmem=4G -pe make-dedicated 16
+#BWA align paired-end reads from genomic DNA to mouse genome
+../../bin/bwa/bwa mem -t 16 ../../reference_genomes/mouse/BWAindex/Mus_musculus.GRCm38.dna_sm.primary_assembly.fa ../fastq/"$SRRbase"_qc.R1.fastq.gz ../fastq/"$SRRbase"_qc.R2.fastq.gz \
+| ~/bin/samtools/samtools sort -@16 -o ../alignment/"$SRRbase".bam -
