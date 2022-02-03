@@ -6,11 +6,19 @@
 #$ -l mem_free=33G,h_vmem=33G 
 #$ -b y 
 /opt/sw/software/Java/1.8.0_60/bin/java -Djava.io.tmpdir=$TMPDIR -Xmx24G -jar /home/walshdj/bin/picard.jar AddOrReplaceReadGroups \
-I=./mtalign/"$SRRbase"_.bam \
-O=./mtalign/"$SRRbase"_rg.bam \
+I=./alignment/"$SRRbase"_.bam \
+O=./alignment/"$SRRbase"_rg.bam \
 SO=coordinate \
 RGID="$SRRbase" \
 RGLB=library1 \
 RGPL=illiuminaNovaSeq6000_SA \
 RGPU=$Lane \
 RGSM=$SRRbase
+
+/opt/sw/software/Java/1.8.0_60/bin/java -Xmx12G -jar /home/walshdj/bin/picard.jar MarkDuplicates \
+I=../alignment/"$SRRbase".bam \
+O=../alignment/"$SRRbase"_rgmd.bam \
+M=./mtalignment_"$SRRbase"_mdmetrics.txt
+
+
+~/bin/samtools/samtools flagstat ./alignment/"$SRRbase"_rgmd.bam | sed "s/^/$A        /g" >> ./depth/"$SRRbase"_flagstat.txt
