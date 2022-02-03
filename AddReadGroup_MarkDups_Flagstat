@@ -1,0 +1,16 @@
+#!/bin/bash
+######################
+#$ -m abe 
+#$ -M walshdj@nih.gov
+#$ -cwd
+#$ -l mem_free=33G,h_vmem=33G 
+#$ -b y 
+/opt/sw/software/Java/1.8.0_60/bin/java -Djava.io.tmpdir=$TMPDIR -Xmx24G -jar /home/walshdj/bin/picard.jar AddOrReplaceReadGroups \
+I=./mtalign/"$SRRbase"_.bam \
+O=./mtalign/"$SRRbase"_rg.bam \
+SO=coordinate \
+RGID="$SRRbase" \
+RGLB=library1 \
+RGPL=illiuminaNovaSeq6000_SA \
+RGPU=$Lane \
+RGSM=$SRRbase
